@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback  } from 'react';
 import {
   Heart,
   PawPrint,
@@ -271,7 +271,6 @@ const SearchAndFilters = ({
   </div>
 );
 
-// Componente da seção de todos os pets
 const AllPetsSection = () => {
   const [allPets, setAllPets] = useState<Pet[]>([]);
   const [filteredPets, setFilteredPets] = useState<Pet[]>([]);
@@ -280,9 +279,7 @@ const AllPetsSection = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [searchedPet, setSearchedPet] = useState<Pet | null>(null);
 
-  // Carregar pets ao montar
   useEffect(() => {
     const loadPets = async () => {
       try {
@@ -297,7 +294,7 @@ const AllPetsSection = () => {
         setAllPets(allPetsData || []);
         setAvailablePets(availablePetsData || []);
         setFilteredPets(allPetsData || []);
-      } catch (err) {
+      } catch {
         setError('Erro ao carregar pets. Tente novamente mais tarde.');
       } finally {
         setLoading(false);
@@ -307,19 +304,16 @@ const AllPetsSection = () => {
     loadPets();
   }, []);
 
-  // Função de busca e filtro
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
     if (searchTerm.trim()) {
       const petData = await fetchPetByName(searchTerm.trim());
       if (petData) {
-        setSearchedPet(petData);
         setFilteredPets([petData]);
       } else {
         const filtered = allPets.filter(pet =>
           pet.nome.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredPets(filtered);
-        setSearchedPet(null);
       }
     } else {
       let petsToFilter = allPets;
@@ -333,19 +327,16 @@ const AllPetsSection = () => {
       }
 
       setFilteredPets(petsToFilter);
-      setSearchedPet(null);
     }
-  };
+  }, [searchTerm, statusFilter, allPets, availablePets]);
 
-  // Aplicar filtros automaticamente
   useEffect(() => {
     if (!searchTerm && statusFilter) {
       handleSearch();
     } else if (!searchTerm && !statusFilter) {
       setFilteredPets(allPets);
-      setSearchedPet(null);
     }
-  }, [statusFilter, allPets, availablePets]);
+  }, [statusFilter, allPets, availablePets, handleSearch, searchTerm]);
 
   if (loading) {
     return (
@@ -424,29 +415,27 @@ const AllPetsSection = () => {
               ))}
             </div>
           ) : (
-            !loading && (
-              <div className="text-center py-12">
-                <PawPrint className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600 text-lg">
-                  {searchTerm || statusFilter
-                    ? 'Nenhum pet encontrado com os critérios de busca.'
-                    : 'Nenhum pet disponível no momento.'
-                  }
-                </p>
-                {(searchTerm || statusFilter) && (
-                  <button
-                    onClick={() => {
-                      setSearchTerm('');
-                      setStatusFilter('');
-                      setFilteredPets(allPets);
-                    }}
-                    className="mt-4 text-purple-600 hover:text-purple-800 font-medium"
-                  >
-                    Limpar filtros
-                  </button>
-                )}
-              </div>
-            )
+            <div className="text-center py-12">
+              <PawPrint className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600 text-lg">
+                {searchTerm || statusFilter
+                  ? 'Nenhum pet encontrado com os critérios de busca.'
+                  : 'Nenhum pet disponível no momento.'
+                }
+              </p>
+              {(searchTerm || statusFilter) && (
+                <button
+                  onClick={() => {
+                    setSearchTerm('');
+                    setStatusFilter('');
+                    setFilteredPets(allPets);
+                  }}
+                  className="mt-4 text-purple-600 hover:text-purple-800 font-medium"
+                >
+                  Limpar filtros
+                </button>
+              )}
+            </div>
           )}
         </div>
       </div>
