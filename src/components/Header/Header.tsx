@@ -29,21 +29,21 @@ export function Header() {
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
             <Link
-              href="/pets"
+              href="/#pets"
               className="text-gray-700 hover:text-purple-600 font-medium transition-colors relative group"
             >
               Pets Disponíveis
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
             <Link
-              href="/como-adotar"
+              href="/"
               className="text-gray-700 hover:text-purple-600 font-medium transition-colors relative group"
             >
               Como Adotar
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
             <Link
-              href="/sobre"
+              href="/"
               className="text-gray-700 hover:text-purple-600 font-medium transition-colors relative group"
             >
               Sobre Nós
@@ -51,7 +51,7 @@ export function Header() {
             </Link>
 
             <Link
-              href="/adotar"
+              href="/"
               className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full font-medium hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
             >
               Quero Adotar
