@@ -1,7 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { Heart, PawPrint, Menu, X } from "lucide-react";
 import { useState } from "react";
-
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
